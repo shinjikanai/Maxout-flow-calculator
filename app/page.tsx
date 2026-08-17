@@ -98,27 +98,34 @@ export default function Page() {
   };
 
   return (
-    <div className="wrap">
-      <header className="top">
-        <div>
-          <h1>{d.meta.title}</h1>
-          <p className="subtitle">{d.meta.subtitle}</p>
-        </div>
-        <div className="langsel" role="group" aria-label={d.nav.langLabel}>
-          {LANGS.map((l) => (
-            <button
-              key={l.code}
-              className={lang === l.code ? "active" : ""}
-              onClick={() => setLang(l.code)}
-            >
-              {l.label}
-            </button>
-          ))}
+    <>
+      <header className="topbar">
+        <div className="topbar-inner">
+          <div className="brand">
+            <span className="dot" aria-hidden="true">
+              Q
+            </span>
+            <h1>{d.meta.title}</h1>
+          </div>
+          <div className="langsel" role="group" aria-label={d.nav.langLabel}>
+            {LANGS.map((l) => (
+              <button
+                key={l.code}
+                className={lang === l.code ? "active" : ""}
+                onClick={() => setLang(l.code)}
+              >
+                {l.label}
+              </button>
+            ))}
+          </div>
         </div>
       </header>
 
-      {/* Intro */}
-      <section className="card">
+      <div className="wrap">
+        <p className="lead">{d.meta.subtitle}</p>
+
+        {/* Intro */}
+        <section className="card">
         <h2>{d.intro.heading}</h2>
         <p style={{ margin: 0, color: "var(--muted)" }}>{d.intro.body}</p>
         <div className="formula">
@@ -401,7 +408,8 @@ export default function Page() {
         </p>
       </section>
 
-      <footer className="note">{d.footer.note}</footer>
-    </div>
+        <footer className="note">{d.footer.note}</footer>
+      </div>
+    </>
   );
 }
