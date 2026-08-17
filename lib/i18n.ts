@@ -59,6 +59,20 @@ export interface Dict {
     utilization: string;
     utilizationHint: string;
     reset: string;
+    metricCompare: string;
+  };
+  steps: {
+    heading: string;
+    caption: string;
+    concurrentStart: string;
+    perUser: string;
+    s1title: string;
+    s1formula: string;
+    s2title: string;
+    s2formula: string;
+    s3title: string;
+    s3formula: string;
+    resultLabel: string;
   };
   results: {
     heading: string;
@@ -169,6 +183,23 @@ const en: Dict = {
     utilizationHint:
       "Safety margin. 80% leaves 20% headroom for spikes, retries and expensive requests.",
     reset: "Reset to example",
+    metricCompare:
+      "Granularity differs: one user generates the most RPS, fewer page views, and the fewest TPS. RPS = every HTTP/API request. Page views = page loads. TPS = completed business transactions (checkout, login). Pick the one that is your real bottleneck.",
+  },
+  steps: {
+    heading: "How this number is calculated",
+    caption:
+      "Every input is turned into concurrent users the site can hold, then into a per-minute release rate. Follow the numbers step by step.",
+    concurrentStart:
+      "You started from concurrent users, so no conversion is needed — we use your capacity directly.",
+    perUser: "user",
+    s1title: "Convert capacity into concurrent users the site can hold",
+    s1formula: "Concurrent users = Capacity ÷ Traffic per active user",
+    s2title: "Apply the safety margin (target utilization)",
+    s2formula: "Target concurrency = Concurrent users × Utilization",
+    s3title: "Little's Law → users admitted per minute",
+    s3formula: "Max Outflow = Target concurrency ÷ Average stay time",
+    resultLabel: "Result",
   },
   results: {
     heading: "Result",
@@ -284,6 +315,23 @@ const ja: Dict = {
     utilizationHint:
       "安全マージン。80%にすると、スパイクや再試行、重いリクエストのために20%の余裕を残せます。",
     reset: "例に戻す",
+    metricCompare:
+      "粒度が異なります。1人のユーザーが生む数は RPS が最も多く、ページビュー、TPS の順に少なくなります。RPS＝すべての HTTP/API リクエスト。ページビュー＝ページ表示回数。TPS＝完了した業務トランザクション（決済・ログインなど）。実際のボトルネックとなる単位を選んでください。",
+  },
+  steps: {
+    heading: "この数字が出るまでの計算",
+    caption:
+      "どの入力値も、まずサイトがさばける同時接続ユーザー数に変換し、次に1分あたりの入場レートに変換します。数値を順番に追ってください。",
+    concurrentStart:
+      "同時接続ユーザーから始めているため、変換は不要です。入力したキャパシティをそのまま使います。",
+    perUser: "人",
+    s1title: "キャパシティをサイトがさばける同時接続ユーザー数に変換",
+    s1formula: "同時接続ユーザー ＝ キャパシティ ÷ 1人あたりのトラフィック",
+    s2title: "安全マージン（目標稼働率）を適用",
+    s2formula: "目標同時接続数 ＝ 同時接続ユーザー × 目標稼働率",
+    s3title: "リトルの法則 → 1分あたりの入場数",
+    s3formula: "最大アウトフロー ＝ 目標同時接続数 ÷ 平均滞在時間",
+    resultLabel: "結果",
   },
   results: {
     heading: "計算結果",
@@ -399,6 +447,23 @@ const ko: Dict = {
     utilizationHint:
       "안전 여유. 80%로 설정하면 스파이크, 재시도, 무거운 요청을 위해 20%의 여유를 남깁니다.",
     reset: "예시로 되돌리기",
+    metricCompare:
+      "세분성이 다릅니다. 사용자 1명이 만드는 양은 RPS가 가장 많고, 페이지뷰, TPS 순으로 적어집니다. RPS = 모든 HTTP/API 요청. 페이지뷰 = 페이지 로드 횟수. TPS = 완료된 업무 트랜잭션(결제·로그인 등). 실제 병목이 되는 단위를 선택하세요.",
+  },
+  steps: {
+    heading: "이 숫자가 나오기까지의 계산",
+    caption:
+      "모든 입력값은 먼저 사이트가 수용할 수 있는 동시 접속 사용자 수로 변환되고, 다음으로 분당 입장 속도로 변환됩니다. 숫자를 단계별로 따라가 보세요.",
+    concurrentStart:
+      "동시 접속 사용자에서 시작했으므로 변환이 필요 없습니다. 입력한 용량을 그대로 사용합니다.",
+    perUser: "명",
+    s1title: "용량을 사이트가 수용할 수 있는 동시 접속 사용자 수로 변환",
+    s1formula: "동시 접속 사용자 = 용량 ÷ 사용자 1명당 트래픽",
+    s2title: "안전 여유(목표 사용률) 적용",
+    s2formula: "목표 동시 접속 수 = 동시 접속 사용자 × 목표 사용률",
+    s3title: "리틀의 법칙 → 분당 입장 인원",
+    s3formula: "최대 아웃플로우 = 목표 동시 접속 수 ÷ 평균 체류 시간",
+    resultLabel: "결과",
   },
   results: {
     heading: "계산 결과",

@@ -85,6 +85,12 @@ export default function Page() {
       ? d.form.metric.pageviews
       : "";
 
+  // Labels used to render the calculation steps
+  const metricUnitLabel = throughputUnit;
+  const perUserUnit = `${metricUnitLabel}/${d.steps.perUser}`;
+  const usersU = d.results.usersUnit;
+  const minU = d.chart.minuteShort;
+
   const resetExample = () => {
     setMetric("tps");
     setCapacityValue("100000");
@@ -153,6 +159,7 @@ export default function Page() {
               ))}
             </div>
             <span className="hint">{d.form.metricHint[metric]}</span>
+            {isThroughput && <p className="compareNote">{d.form.metricCompare}</p>}
           </div>
 
           <label className="field">
@@ -322,15 +329,79 @@ export default function Page() {
                   </div>
                 )}
               </div>
-
-              <div className="formulaline">
-                {d.results.formulaLine}: {fmt(r.targetConcurrency)} ÷ {fmt1(input.stayMinutes)}{" "}
-                {d.chart.minuteShort} = {fmt(r.recommendedOutflow)} {d.results.recommendedOutflowUnit}
-              </div>
             </>
           )}
         </section>
       </div>
+
+      {/* Calculation steps */}
+      {r.valid && (
+        <section className="card">
+          <h2>{d.steps.heading}</h2>
+          <p className="lead" style={{ marginTop: 0 }}>
+            {d.steps.caption}
+          </p>
+          <ol className="steps">
+            {!isThroughput && (
+              <li className="step">
+                <div className="step-badge done" aria-hidden="true">
+                  ✓
+                </div>
+                <div className="step-body">
+                  <div className="step-note">{d.steps.concurrentStart}</div>
+                </div>
+              </li>
+            )}
+            {isThroughput && (
+              <li className="step">
+                <div className="step-badge" aria-hidden="true">
+                  1
+                </div>
+                <div className="step-body">
+                  <div className="step-title">{d.steps.s1title}</div>
+                  <div className="step-formula">{d.steps.s1formula}</div>
+                  <div className="step-calc">
+                    {fmt(num(capacityValue))} {metricUnitLabel} ÷ {fmt1(effPerUserRate)} {perUserUnit} ={" "}
+                    <b>
+                      {fmt(r.concurrentCapacity)} {usersU}
+                    </b>
+                  </div>
+                </div>
+              </li>
+            )}
+            <li className="step">
+              <div className="step-badge" aria-hidden="true">
+                {isThroughput ? 2 : 1}
+              </div>
+              <div className="step-body">
+                <div className="step-title">{d.steps.s2title}</div>
+                <div className="step-formula">{d.steps.s2formula}</div>
+                <div className="step-calc">
+                  {fmt(r.concurrentCapacity)} {usersU} × {fmt1(num(utilizationPct))}% ={" "}
+                  <b>
+                    {fmt(r.targetConcurrency)} {usersU}
+                  </b>
+                </div>
+              </div>
+            </li>
+            <li className="step">
+              <div className="step-badge accent" aria-hidden="true">
+                {isThroughput ? 3 : 2}
+              </div>
+              <div className="step-body">
+                <div className="step-title">{d.steps.s3title}</div>
+                <div className="step-formula">{d.steps.s3formula}</div>
+                <div className="step-calc">
+                  {fmt(r.targetConcurrency)} {usersU} ÷ {fmt1(input.stayMinutes)} {minU} ={" "}
+                  <b className="final">
+                    {fmt(r.recommendedOutflow)} {d.results.recommendedOutflowUnit}
+                  </b>
+                </div>
+              </div>
+            </li>
+          </ol>
+        </section>
+      )}
 
       {/* Chart */}
       {r.valid && (
