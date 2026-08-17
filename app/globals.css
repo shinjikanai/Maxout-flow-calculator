@@ -84,7 +84,7 @@ body {
 }
 
 .wrap {
-  max-width: 980px;
+  max-width: 1220px;
   margin: 0 auto;
   padding: 26px 20px 72px;
 }
@@ -121,6 +121,20 @@ h2 {
 
 @media (max-width: 760px) {
   .grid2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Three-column working area: input | formula | result */
+.grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1.08fr 0.94fr;
+  gap: 18px;
+  align-items: start;
+}
+
+@media (max-width: 1080px) {
+  .grid3 {
     grid-template-columns: 1fr;
   }
 }
@@ -278,6 +292,14 @@ select:focus {
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-top: 14px;
+}
+
+/* In the 3-column layout the result sits in a narrow column, so stack its
+   stats one per row for readability. */
+@media (min-width: 1081px) {
+  .statgrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .stat {
