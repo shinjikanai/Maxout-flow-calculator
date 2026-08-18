@@ -417,6 +417,23 @@ tr.transition td {
   color: #04231f;
 }
 
+/* ---- Live derived per-user rate ---- */
+.derived {
+  margin-top: 8px;
+  background: var(--teal-tint);
+  border: 1px solid #bfeee9;
+  border-radius: 9px;
+  padding: 8px 11px;
+  font-size: 13px;
+  color: var(--head);
+}
+
+.derived b {
+  color: var(--teal-d);
+  font-size: 15px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
 /* ---- Metric comparison note ---- */
 .compareNote {
   font-size: 12px;

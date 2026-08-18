@@ -54,6 +54,7 @@ export interface Dict {
     };
     thinkTime: string;
     thinkTimeHint: string;
+    derivedRate: string;
     stayTime: string;
     stayTimeHint: string;
     utilization: string;
@@ -177,6 +178,7 @@ const en: Dict = {
     thinkTime: "Think time between clicks (seconds)",
     thinkTimeHint:
       "Average seconds a user waits between actions. One action every N seconds → rate = actions ÷ N.",
+    derivedRate: "Each active user ≈",
     stayTime: "Average stay time / journey (minutes)",
     stayTimeHint: "How long an admitted user stays active on the site (W).",
     utilization: "Target utilization (%)",
@@ -309,6 +311,7 @@ const ja: Dict = {
     thinkTime: "クリック間の思考時間（秒）",
     thinkTimeHint:
       "ユーザーが次の操作までに待つ平均秒数。N秒ごとに1操作 → レート ＝ 操作数 ÷ N。",
+    derivedRate: "アクティブユーザー1人あたり ≈",
     stayTime: "平均滞在時間 / 導線（分）",
     stayTimeHint: "入場したユーザーがサイトで利用し続ける時間（W）。",
     utilization: "目標稼働率（%）",
@@ -441,6 +444,7 @@ const ko: Dict = {
     thinkTime: "클릭 사이의 생각 시간(초)",
     thinkTimeHint:
       "사용자가 다음 동작까지 기다리는 평균 초. N초마다 1회 동작 → 속도 = 동작 수 ÷ N.",
+    derivedRate: "활성 사용자 1명당 ≈",
     stayTime: "평균 체류 시간 / 여정(분)",
     stayTimeHint: "입장한 사용자가 사이트에서 활동을 유지하는 시간(W).",
     utilization: "목표 사용률(%)",

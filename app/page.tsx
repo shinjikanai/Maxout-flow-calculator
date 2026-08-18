@@ -250,7 +250,17 @@ export default function Page() {
                 </div>
               )}
               {perUserMode === "behavior" && (
-                <span className="hint">{d.form.thinkTimeHint}</span>
+                <>
+                  <span className="hint">{d.form.thinkTimeHint}</span>
+                  {effPerUserRate > 0 && (
+                    <div className="derived">
+                      {d.form.derivedRate}{" "}
+                      <b>
+                        {fmt1(effPerUserRate)} {perUserUnit}
+                      </b>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}
