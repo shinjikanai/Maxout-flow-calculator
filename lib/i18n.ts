@@ -55,6 +55,7 @@ export interface Dict {
     thinkTime: string;
     thinkTimeHint: string;
     derivedRate: string;
+    secShort: string;
     stayTime: string;
     stayTimeHint: string;
     utilization: string;
@@ -74,6 +75,16 @@ export interface Dict {
     s3title: string;
     s3formula: string;
     resultLabel: string;
+    meansLabel: string;
+    reverseFormula: string;
+    s1means: (users: string, perUser: string, unit: string, load: string) => string;
+    s2means: (
+      users: string,
+      load: string,
+      unit: string,
+      utilPct: string,
+      headroomPct: string
+    ) => string;
   };
   results: {
     heading: string;
@@ -179,6 +190,7 @@ const en: Dict = {
     thinkTimeHint:
       "Average seconds a user waits between actions. One action every N seconds → rate = actions ÷ N.",
     derivedRate: "Each active user ≈",
+    secShort: "s",
     stayTime: "Average stay time / journey (minutes)",
     stayTimeHint: "How long an admitted user stays active on the site (W).",
     utilization: "Target utilization (%)",
@@ -202,6 +214,12 @@ const en: Dict = {
     s3title: "Little's Law → users admitted per minute",
     s3formula: "Max Outflow = Target concurrency ÷ Average stay time",
     resultLabel: "Result",
+    meansLabel: "What this means",
+    reverseFormula: "Expected load = Concurrent users × Traffic per active user",
+    s1means: (users, perUser, unit, load) =>
+      `At ${perUser} ${unit} per active user, about ${users} concurrent users would generate ${load} ${unit} — reaching the site's stated capacity.`,
+    s2means: (users, load, unit, utilPct, headroomPct) =>
+      `At ${utilPct}% target utilization, about ${users} active users would generate ${load} ${unit}, leaving roughly ${headroomPct}% headroom.`,
   },
   results: {
     heading: "Result",
@@ -312,6 +330,7 @@ const ja: Dict = {
     thinkTimeHint:
       "ユーザーが次の操作までに待つ平均秒数。N秒ごとに1操作 → レート ＝ 操作数 ÷ N。",
     derivedRate: "アクティブユーザー1人あたり ≈",
+    secShort: "秒",
     stayTime: "平均滞在時間 / 導線（分）",
     stayTimeHint: "入場したユーザーがサイトで利用し続ける時間（W）。",
     utilization: "目標稼働率（%）",
@@ -335,6 +354,12 @@ const ja: Dict = {
     s3title: "リトルの法則 → 1分あたりの入場数",
     s3formula: "最大アウトフロー ＝ 目標同時接続数 ÷ 平均滞在時間",
     resultLabel: "結果",
+    meansLabel: "これは何を意味するか",
+    reverseFormula: "想定負荷 ＝ 同時接続ユーザー × 1人あたりのトラフィック",
+    s1means: (users, perUser, unit, load) =>
+      `アクティブユーザー1人あたり ${perUser} ${unit} の場合、約 ${users} 人の同時接続ユーザーで ${load} ${unit} となり、サイトの上限キャパシティに達します。`,
+    s2means: (users, load, unit, utilPct, headroomPct) =>
+      `目標稼働率 ${utilPct}% では、約 ${users} 人のアクティブユーザーで約 ${load} ${unit} となり、約 ${headroomPct}% の余裕を残します。`,
   },
   results: {
     heading: "計算結果",
@@ -445,6 +470,7 @@ const ko: Dict = {
     thinkTimeHint:
       "사용자가 다음 동작까지 기다리는 평균 초. N초마다 1회 동작 → 속도 = 동작 수 ÷ N.",
     derivedRate: "활성 사용자 1명당 ≈",
+    secShort: "초",
     stayTime: "평균 체류 시간 / 여정(분)",
     stayTimeHint: "입장한 사용자가 사이트에서 활동을 유지하는 시간(W).",
     utilization: "목표 사용률(%)",
@@ -468,6 +494,12 @@ const ko: Dict = {
     s3title: "리틀의 법칙 → 분당 입장 인원",
     s3formula: "최대 아웃플로우 = 목표 동시 접속 수 ÷ 평균 체류 시간",
     resultLabel: "결과",
+    meansLabel: "이것이 의미하는 바",
+    reverseFormula: "예상 부하 = 동시 접속 사용자 × 사용자 1명당 트래픽",
+    s1means: (users, perUser, unit, load) =>
+      `활성 사용자 1명당 ${perUser} ${unit}일 때, 약 ${users}명의 동시 접속 사용자가 ${load} ${unit}를 생성하여 사이트의 명시된 용량에 도달합니다.`,
+    s2means: (users, load, unit, utilPct, headroomPct) =>
+      `목표 사용률 ${utilPct}%에서는 약 ${users}명의 활성 사용자가 약 ${load} ${unit}를 생성하며, 약 ${headroomPct}%의 여유를 남깁니다.`,
   },
   results: {
     heading: "계산 결과",

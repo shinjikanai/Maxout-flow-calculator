@@ -90,6 +90,12 @@ export default function Page() {
   const perUserUnit = `${metricUnitLabel}/${d.steps.perUser}`;
   const usersU = d.results.usersUnit;
   const minU = d.chart.minuteShort;
+  // Unit for the "expected load" interpretation (page views carry a time basis)
+  const loadUnit =
+    metric === "pageviews"
+      ? `${d.form.metric.pageviews} ${timeBasis === "min" ? "/min" : "/sec"}`
+      : metricUnitLabel;
+  const headroomPct = 100 - num(utilizationPct);
 
   const resetExample = () => {
     setMetric("tps");
@@ -254,10 +260,15 @@ export default function Page() {
                   <span className="hint">{d.form.thinkTimeHint}</span>
                   {effPerUserRate > 0 && (
                     <div className="derived">
-                      {d.form.derivedRate}{" "}
-                      <b>
-                        {fmt1(effPerUserRate)} {perUserUnit}
-                      </b>
+                      <span className="derived-label">{d.form.derivedRate}</span>
+                      <span className="derived-calc">
+                        {fmt1(num(actionsPerClick))} ÷ {fmt1(num(thinkTime))}
+                        {d.form.secShort}
+                        {effectiveBasis === "min" ? " × 60" : ""} ={" "}
+                        <b>
+                          {fmt1(effPerUserRate)} {perUserUnit}
+                        </b>
+                      </span>
                     </div>
                   )}
                 </>
@@ -330,6 +341,24 @@ export default function Page() {
                           {fmt(r.concurrentCapacity)} {usersU}
                         </b>
                       </div>
+                      <div className="means">
+                        <span className="means-label">{d.steps.meansLabel}</span>
+                        <span className="means-formula">{d.steps.reverseFormula}</span>
+                        <span className="means-calc">
+                          {fmt(r.concurrentCapacity)} {usersU} × {fmt1(effPerUserRate)} {perUserUnit} ={" "}
+                          <b>
+                            {fmt(r.concurrentCapacity * effPerUserRate)} {loadUnit}
+                          </b>
+                        </span>
+                        <span className="means-text">
+                          {d.steps.s1means(
+                            fmt(r.concurrentCapacity),
+                            fmt1(effPerUserRate),
+                            loadUnit,
+                            fmt(r.concurrentCapacity * effPerUserRate)
+                          )}
+                        </span>
+                      </div>
                     </div>
                   </li>
                 )}
@@ -346,6 +375,26 @@ export default function Page() {
                         {fmt(r.targetConcurrency)} {usersU}
                       </b>
                     </div>
+                    {isThroughput && (
+                      <div className="means">
+                        <span className="means-label">{d.steps.meansLabel}</span>
+                        <span className="means-calc">
+                          {fmt(r.targetConcurrency)} {usersU} × {fmt1(effPerUserRate)} {perUserUnit} ={" "}
+                          <b>
+                            {fmt(r.targetConcurrency * effPerUserRate)} {loadUnit}
+                          </b>
+                        </span>
+                        <span className="means-text">
+                          {d.steps.s2means(
+                            fmt(r.targetConcurrency),
+                            fmt(r.targetConcurrency * effPerUserRate),
+                            loadUnit,
+                            fmt1(num(utilizationPct)),
+                            fmt1(headroomPct)
+                          )}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </li>
                 <li className="step">
