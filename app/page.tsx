@@ -22,10 +22,14 @@ export default function Page() {
   const [metric, setMetric] = useState<Metric>("tps");
   const [capacityValue, setCapacityValue] = useState("100000");
   const [timeBasis, setTimeBasis] = useState<TimeBasis>("min");
-  const [perUserMode, setPerUserMode] = useState<"direct" | "behavior">("direct");
+  const [perUserMode, setPerUserMode] = useState<"direct" | "behavior" | "measure">(
+    "direct"
+  );
   const [perUserRate, setPerUserRate] = useState("1");
   const [actionsPerClick, setActionsPerClick] = useState("1");
   const [thinkTime, setThinkTime] = useState("5");
+  const [observedLoad, setObservedLoad] = useState("100000");
+  const [observedUsers, setObservedUsers] = useState("2000");
   const [stayMinutes, setStayMinutes] = useState("10");
   const [utilizationPct, setUtilizationPct] = useState("80");
 
@@ -56,9 +60,13 @@ export default function Page() {
   // Effective per-user rate (from direct entry or behavior estimate)
   const isThroughput = metric !== "concurrent";
   const effectiveBasis: TimeBasis = metric === "pageviews" ? timeBasis : "sec";
+  const measuredRate =
+    num(observedUsers) > 0 ? num(observedLoad) / num(observedUsers) : NaN;
   const effPerUserRate =
     perUserMode === "direct"
       ? num(perUserRate)
+      : perUserMode === "measure"
+      ? measuredRate
       : perUserRateFromBehavior(num(actionsPerClick), num(thinkTime), effectiveBasis);
 
   const input: CalcInput = {
@@ -209,6 +217,12 @@ export default function Page() {
                   {d.form.perUserDirect}
                 </button>
                 <button
+                  className={perUserMode === "measure" ? "active" : ""}
+                  onClick={() => setPerUserMode("measure")}
+                >
+                  {d.form.perUserMeasure}
+                </button>
+                <button
                   className={perUserMode === "behavior" ? "active" : ""}
                   onClick={() => setPerUserMode("behavior")}
                 >
@@ -216,7 +230,7 @@ export default function Page() {
                 </button>
               </div>
 
-              {perUserMode === "direct" ? (
+              {perUserMode === "direct" && (
                 <label className="field">
                   <span className="lab">
                     {d.form.perUserRateLabel[metric as "tps" | "rps" | "pageviews"]}
@@ -229,34 +243,76 @@ export default function Page() {
                     onChange={(e) => setPerUserRate(e.target.value)}
                   />
                 </label>
-              ) : (
-                <div className="row" style={{ marginTop: 4 }}>
-                  <label className="field" style={{ marginTop: 12 }}>
-                    <span className="lab">
-                      {d.form.actionsPerClick[metric as "tps" | "rps" | "pageviews"]}
-                    </span>
-                    <input
-                      type="number"
-                      min="0"
-                      step="any"
-                      value={actionsPerClick}
-                      onChange={(e) => setActionsPerClick(e.target.value)}
-                    />
-                  </label>
-                  <label className="field" style={{ marginTop: 12 }}>
-                    <span className="lab">{d.form.thinkTime}</span>
-                    <input
-                      type="number"
-                      min="0"
-                      step="any"
-                      value={thinkTime}
-                      onChange={(e) => setThinkTime(e.target.value)}
-                    />
-                  </label>
-                </div>
               )}
+
+              {perUserMode === "measure" && (
+                <>
+                  <div className="row" style={{ marginTop: 4 }}>
+                    <label className="field" style={{ marginTop: 12 }}>
+                      <span className="lab">
+                        {d.form.observedLoad[metric as "tps" | "rps" | "pageviews"]}
+                      </span>
+                      <input
+                        type="number"
+                        min="0"
+                        step="any"
+                        value={observedLoad}
+                        onChange={(e) => setObservedLoad(e.target.value)}
+                      />
+                    </label>
+                    <label className="field" style={{ marginTop: 12 }}>
+                      <span className="lab">{d.form.observedUsers}</span>
+                      <input
+                        type="number"
+                        min="0"
+                        step="any"
+                        value={observedUsers}
+                        onChange={(e) => setObservedUsers(e.target.value)}
+                      />
+                    </label>
+                  </div>
+                  <span className="hint">{d.form.measureHint}</span>
+                  {effPerUserRate > 0 && (
+                    <div className="derived">
+                      <span className="derived-label">{d.form.derivedRate}</span>
+                      <span className="derived-calc">
+                        {fmt(num(observedLoad))} {metricUnitLabel} ÷ {fmt(num(observedUsers))}{" "}
+                        {usersU} ={" "}
+                        <b>
+                          {fmt1(effPerUserRate)} {perUserUnit}
+                        </b>
+                      </span>
+                    </div>
+                  )}
+                </>
+              )}
+
               {perUserMode === "behavior" && (
                 <>
+                  <div className="row" style={{ marginTop: 4 }}>
+                    <label className="field" style={{ marginTop: 12 }}>
+                      <span className="lab">
+                        {d.form.actionsPerClick[metric as "tps" | "rps" | "pageviews"]}
+                      </span>
+                      <input
+                        type="number"
+                        min="0"
+                        step="any"
+                        value={actionsPerClick}
+                        onChange={(e) => setActionsPerClick(e.target.value)}
+                      />
+                    </label>
+                    <label className="field" style={{ marginTop: 12 }}>
+                      <span className="lab">{d.form.thinkTime}</span>
+                      <input
+                        type="number"
+                        min="0"
+                        step="any"
+                        value={thinkTime}
+                        onChange={(e) => setThinkTime(e.target.value)}
+                      />
+                    </label>
+                  </div>
                   <span className="hint">{d.form.thinkTimeHint}</span>
                   {effPerUserRate > 0 && (
                     <div className="derived">

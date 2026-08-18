@@ -42,11 +42,19 @@ export interface Dict {
     perUserMode: string;
     perUserDirect: string;
     perUserBehavior: string;
+    perUserMeasure: string;
     perUserRateLabel: {
       tps: string;
       rps: string;
       pageviews: string;
     };
+    observedLoad: {
+      tps: string;
+      rps: string;
+      pageviews: string;
+    };
+    observedUsers: string;
+    measureHint: string;
     actionsPerClick: {
       tps: string;
       rps: string;
@@ -176,11 +184,20 @@ const en: Dict = {
     perUserMode: "Traffic per active user",
     perUserDirect: "Enter rate directly",
     perUserBehavior: "Estimate from behavior",
+    perUserMeasure: "From a measurement",
     perUserRateLabel: {
       tps: "TPS generated per active user",
       rps: "RPS generated per active user",
       pageviews: "Page views generated per active user",
     },
+    observedLoad: {
+      tps: "Observed TPS (e.g. load-test peak)",
+      rps: "Observed RPS (e.g. load-test peak)",
+      pageviews: "Observed page views (e.g. peak)",
+    },
+    observedUsers: "Active users seen at that load",
+    measureHint:
+      "Easiest if you have load-test data: enter a measured point. Rate = observed load ÷ active users.",
     actionsPerClick: {
       tps: "Transactions per click",
       rps: "Requests per page / click",
@@ -316,11 +333,20 @@ const ja: Dict = {
     perUserMode: "アクティブユーザー1人あたりのトラフィック",
     perUserDirect: "レートを直接入力",
     perUserBehavior: "行動から推定",
+    perUserMeasure: "測定値から",
     perUserRateLabel: {
       tps: "ユーザー1人あたりのTPS",
       rps: "ユーザー1人あたりのRPS",
       pageviews: "ユーザー1人あたりのページビュー",
     },
+    observedLoad: {
+      tps: "観測されたTPS（負荷試験のピーク等）",
+      rps: "観測されたRPS（負荷試験のピーク等）",
+      pageviews: "観測されたページビュー（ピーク等）",
+    },
+    observedUsers: "そのときのアクティブユーザー数",
+    measureHint:
+      "負荷試験のデータがあれば最も簡単です。実測した1点を入力してください。レート ＝ 観測負荷 ÷ アクティブユーザー数。",
     actionsPerClick: {
       tps: "1クリックあたりのトランザクション数",
       rps: "1ページ/クリックあたりのリクエスト数",
@@ -456,11 +482,20 @@ const ko: Dict = {
     perUserMode: "활성 사용자 1명당 트래픽",
     perUserDirect: "속도 직접 입력",
     perUserBehavior: "행동으로 추정",
+    perUserMeasure: "측정값에서",
     perUserRateLabel: {
       tps: "사용자 1명당 TPS",
       rps: "사용자 1명당 RPS",
       pageviews: "사용자 1명당 페이지뷰",
     },
+    observedLoad: {
+      tps: "관측된 TPS (부하 테스트 피크 등)",
+      rps: "관측된 RPS (부하 테스트 피크 등)",
+      pageviews: "관측된 페이지뷰 (피크 등)",
+    },
+    observedUsers: "그때의 활성 사용자 수",
+    measureHint:
+      "부하 테스트 데이터가 있으면 가장 쉽습니다. 측정한 한 지점을 입력하세요. 속도 = 관측 부하 ÷ 활성 사용자 수.",
     actionsPerClick: {
       tps: "클릭당 트랜잭션 수",
       rps: "페이지/클릭당 요청 수",
